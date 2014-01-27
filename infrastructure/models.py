@@ -7,7 +7,9 @@ import json
 
 class Module_List(models.Model):
 	name = models.CharField(max_length=50)
-	data = models.CharField(max_length=255)
+	package = models.CharField(max_length=255)
+	data = models.TextField(max_length=255, blank=True)
+	config = models.TextField(blank=True, null=True)
 
 	def __unicode__(self):
         	return u'%s' % (self.name)

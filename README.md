@@ -1,10 +1,9 @@
 WebUI
 =====
-
 WebUI for SingularityHA
 
-
 ## Requires ##
-MySQL-python
-django (obviously)
-djangorestframework
++django (1.7 or later)
++djangorestframework
++MySQL-python
++jsonfield
