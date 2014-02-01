@@ -10,6 +10,7 @@ class Module_List(models.Model):
 	package = models.CharField(max_length=255)
 	data = models.TextField(max_length=255, blank=True)
 	config = models.TextField(blank=True, null=True)
+	actuatorfile = models.CharField(max_length=255, blank=True, null=True,verbose_name="Actuator file")
 
 	def __unicode__(self):
         	return u'%s' % (self.name)

@@ -2,6 +2,16 @@ from tastypie.resources import ModelResource
 from tastypie import fields
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from infrastructure.models import Device, Module, Server, Module_List
+import json
+
+class Module_ActuatorResource(ModelResource):
+	class Meta:
+		queryset = Module_List.objects.all()
+		filtering = {
+			"name" : ALL,	
+		}
+		excludes = ('id', 'data', 'config', 'package')
+		include_resource_uri = False 
 
 class Module_ListResource(ModelResource):
 	class Meta:
@@ -9,7 +19,7 @@ class Module_ListResource(ModelResource):
 		filtering = {
 			"name": ALL,
 		}
-		excludes = ('name', 'data')
+		excludes = ('data')
 		include_resource_uri = False
 
 class ServerResource(ModelResource):
@@ -25,7 +35,7 @@ class ModuleResource(ModelResource):
 	name = fields.CharField(attribute="module")
  	serverName = fields.CharField(attribute="server")
 	server = fields.ForeignKey(ServerResource, 'server',full=False)
-		
+	
 	class Meta:
 		queryset = Module.objects.all()
 		filtering = {

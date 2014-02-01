@@ -1,15 +1,15 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from tastypie.api import Api
-from infrastructure.api import Module_ListResource, ServerResource, ModuleResource, DeviceResource
+from infrastructure.api import Module_ActuatorResource, Module_ListResource, ServerResource, ModuleResource, DeviceResource
 
 v1_api = Api(api_name='v1')
+v1_api.register(Module_ActuatorResource())
 v1_api.register(Module_ListResource())
 v1_api.register(ServerResource())
 v1_api.register(ModuleResource())
 v1_api.register(DeviceResource())
 
-module_resource = ModuleResource()
 
 admin.autodiscover()
 
