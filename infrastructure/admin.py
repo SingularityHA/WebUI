@@ -1,5 +1,5 @@
 from django.contrib import admin
-from infrastructure.models import Server,Module,Module_List,Device,Location
+from infrastructure.models import Server,Module,Module_List,Device,Room
 
 class ModuleAdmin(admin.ModelAdmin):
 	list_filter = ['server']
@@ -22,11 +22,8 @@ class DeviceInline(admin.StackedInline):
 	model = Device
 	extra = 1
 
-class LocationAdmin(admin.ModelAdmin):
-	inlines = [DeviceInline]
-
 admin.site.register(Server, ServerAdmin)
 admin.site.register(Module, ModuleAdmin)
 admin.site.register(Module_List)
-admin.site.register(Location, LocationAdmin)
+admin.site.register(Room)
 admin.site.register(Device, DeviceAdmin)
