@@ -47,6 +47,7 @@ class Device(models.Model):
 	TYPE_CHOICES = (('sensor', 'Sensor'),
                     ('actuator', 'Actuator'))
 	name = models.CharField(max_length=50)
+	nice_name = models.CharField(max_length=255,blank=True,null=True)
 	module = models.ForeignKey(Module)	
 	type = models.CharField(max_length=9, choices=TYPE_CHOICES, default="sensor")
 	attributes = JSONField(max_length=255,blank=True)

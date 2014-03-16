@@ -1,13 +1,21 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% autoescape off %}
 {% block head %}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{% static 'js/jquery.switchButton.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/jquery.switchButton.css' %}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
 <script type="text/javascript">
 var deviceArray = [];
 changeSuppress = ""
 
 {% for actuator in actuators %}
-deviceArray.push( {{actuator.name}} );
+deviceArray.push( "{{actuator.name}}" );
 {% endfor %}
 
 socket = io.connect('http://172.25.119.5:5000');
@@ -15,8 +23,10 @@ socket.on('connect', function () {
 	socket.on('state', function (msg) {
 		var parsed = jQuery.parseJSON(msg);
 		console.log(parsed)
+		console.log(jQuery.inArray(parsed.device, deviceArray))
 		if ( jQuery.inArray(parsed.device, deviceArray) > -1)
 		{
+			console.log(parsed.module)
 			switch (parsed.module) {
 				{% for module in modules.values %}
 				{{module.widget_mqtt_js|safe}}
@@ -26,6 +36,37 @@ socket.on('connect', function () {
 	});
 	socket.emit('subscribe',{topic:'state'});
 });
+$(document).ready(function() {
+        $( "p" ).click(function() {
+          alert( "Handler for .click() called. "+event.target.id+$(this).text() );
+        });
+        $(".onoffcheck").switchButton({
+          on_label: 'ON',
+          off_label: 'OFF'
+        });
+        $('.onoffcheck').change(function() {
+                info = $(this).attr('id').split("_")
+                if (info[2] = "state") {
+                        if (changeSuppress != info[1]) {
+                                state = ($(this).is(":checked")) ? "on" : "off";
+                                var dataArray = ({module: info[0], device: info[1]});
+                                dataArray[info[2]] = state
+                                socket.emit("command", dataArray);
+                        }
+                }
+        });
+        $( ".brightnessslider" ).slider({
+                max: 10,
+                change: function(event, ui) {
+                        info = $(this).attr('id').split("_")
+                        if (changeSuppress != info[1]) {
+                                var dataArray = ({module: info[0], device: info[1], attribute: "brightness", value: ui.value});
+                                socket.emit("command", dataArray);
+                        }
+                }
+        });
+});
+
 </script>
 {% endblock %}
 {% endautoescape %}
@@ -34,8 +75,10 @@ socket.on('connect', function () {
 <div class="row-fluid">
 	<div class="col-md-4">
 		<h2>Devices</h2>
+
 		{% for actuator in actuators %}
-			<li>{{actuator.name}} - {{actuator.module.name_only}}</li>
+			{{actuator.widget_html|safe}}
+			<br />
 		{% endfor %}
 	</div>
 	<div class="col-md-8">
