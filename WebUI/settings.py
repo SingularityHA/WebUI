@@ -61,10 +61,17 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'SingularityHA',
-	'HOST': '127.0.0.1',
-	'USER': 'SingularityHA',
-	'PASSWORD': 'SingularityHA',
-    }
+	    'HOST': '127.0.0.1',
+	    'USER': 'SingularityHA',
+	    'PASSWORD': 'SingularityHA',
+    },
+    'SingularityBase': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'SingularityBase',
+	    'HOST': '127.0.0.1',
+	    'USER': 'SingularityHA',
+	    'PASSWORD': 'SingularityHA',
+    },
 }
 
 # Internationalization

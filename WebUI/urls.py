@@ -21,5 +21,6 @@ urlpatterns = patterns('',
     url(r'^control/', include('control.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(v1_api.urls)),
+    url(r'^keepalive', 'control.views.keepalive', name="keepalive"),
 )
 
